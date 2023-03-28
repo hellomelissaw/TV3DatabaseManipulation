@@ -49,6 +49,7 @@ public class FootagesAndReportersLoader {
 						Date date = null;
 						try {
 							date = dateParser.parse(values.get(1));
+							System.out.println("date: " + date);
 						} catch (ParseException e) {
 							throw new NumberFormatException("Invalid value (" + values.get(1) + ") for date at line " + lineNbr);
 						}

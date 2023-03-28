@@ -23,8 +23,8 @@ public class FootagesAndReportersLoader {
 	public static final String COMMA_DELIMITER = ",";
 	private static final int NUMBER_OF_FIELDS_EXPECTED = 10;
 	private final String delimiter = SEMICOLON_DELIMITER;
-	SimpleDateFormat dateParser = new SimpleDateFormat("yyyyMMdd");
-
+	//SimpleDateFormat dateParser = new SimpleDateFormat("yyyyMMdd");
+	DateParser dateParser = new DateParser();
 	public List<FootageAndReporter> loadFootagesAndReporters(String filename) throws FileNotFoundException, IOException {
 		List<FootageAndReporter> farList = new ArrayList<FootageAndReporter>();
 		
@@ -46,13 +46,15 @@ public class FootagesAndReportersLoader {
 						continue;
 					if(values.size() == NUMBER_OF_FIELDS_EXPECTED) {
 						String title = values.get(0);
-						Date date = null;
-						try {
-							date = dateParser.parse(values.get(1));
+						String date = dateParser.parseDate(values.get(1));
+						//Date date = null;
+						/*try {
+							//date = dateParser.parse(values.get(1));
+							date = dateParser.parseDate(values.get(1));
 							System.out.println("date: " + date);
 						} catch (ParseException e) {
 							throw new NumberFormatException("Invalid value (" + values.get(1) + ") for date at line " + lineNbr);
-						}
+						}*/
 						Integer duration = Integer.valueOf(values.get(2));
 						Integer cpr = Integer.valueOf(values.get(3));
 						String firstName = values.get(4);

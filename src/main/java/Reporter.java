@@ -18,7 +18,7 @@ public class Reporter {
         this.country = country;
     }
 
-    public Integer getCPR() { return cpr; }
+    public String getCPR() { return cpr.toString(); }
 
     public String getFirstName() {
         return firstName;

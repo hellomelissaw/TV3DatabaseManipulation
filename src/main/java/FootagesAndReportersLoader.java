@@ -46,9 +46,9 @@ public class FootagesAndReportersLoader {
 						continue;
 					if(values.size() == NUMBER_OF_FIELDS_EXPECTED) {
 						String title = values.get(0);
-						Date date = null;
+						String date = null;
 						try {
-							date = dateParser.parse(values.get(1));
+							date = "test";
 							System.out.println("date: " + date);
 						} catch (ParseException e) {
 							throw new NumberFormatException("Invalid value (" + values.get(1) + ") for date at line " + lineNbr);

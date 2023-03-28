@@ -2,10 +2,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 public class Footage {
     private final String title;
-    private final Date date;
+    private final String date;
     private final Integer duration;
 
-    public Footage(String title, Date date, Integer duration) {
+    public Footage(String title, String date, Integer duration) {
         this.title = title;
         this.date = date;
         this.duration = duration;
@@ -14,7 +14,7 @@ public class Footage {
     public String getTitle() {
         return title;
     }
-    public Date getDate() { return date; }
+    public String getDate() { return date; }
     public Integer getDuration() {
         return duration;
     }

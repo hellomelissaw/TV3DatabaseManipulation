@@ -17,13 +17,10 @@ public class ManipulateTV3 {
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?characterEncoding=" + cp;
 
         try {
-			//Scanner scanner = new Scanner(System.in, "CP850"); //Western Europe Console CodePage
-            //String insertManually = scanner.nextLine();
-            //System.out.println("Type sql manipulation: ");
             FootagesAndReportersLoader loader = new FootagesAndReportersLoader();
             List<FootageAndReporter> footAndRep = loader.loadFootagesAndReporters("src/main/java/uploads.csv");
-            String insertJournalist = null;
-            String insertFootage = null;
+            String insertJournalist;
+            String insertFootage;
             for(int i = 0 ; i < footAndRep.size() ; i ++) {
                 String country = "'Danemark');";
                 insertJournalist = "INSERT Journalist VALUES (" + footAndRep.get(i).getReporter().getCPR()
@@ -35,15 +32,10 @@ public class ManipulateTV3 {
                         + ", '" + footAndRep.get(i).getReporter().getZIPCode() + "'"
                         + ", " + country;
 
-                System.out.println("Journalist #" + i + ": " + insertJournalist);
-
-                //System.out.println( footAndRep.get(0).getFootage().getDuration() + "class is: " + footAndRep.get(0).getReporter().getCPR().getClass());
                 insertFootage = "INSERT Footage VALUES ('" + footAndRep.get(i).getFootage().getTitle() + "'," +
                         " '" + footAndRep.get(i).getFootage().getDate() + "',"
                         + " '" + footAndRep.get(i).getFootage().getDuration() + "', "
                         + footAndRep.get(i).getReporter().getCPR() + ");";
-                System.out.println("Footage #" + i + ": " + insertFootage);
-                //scanner.close();
 
                 // Get a connection.
                 Connection connection = DriverManager.getConnection(url, username, password);
@@ -52,6 +44,8 @@ public class ManipulateTV3 {
 
                 try {
                     statementJour.executeUpdate(insertJournalist);
+                    System.out.println("Journalist #" + i + ": " + insertJournalist);
+
                 } catch (SQLIntegrityConstraintViolationException d) {
                     System.out.println("Entry already exists in the database!");
                 }
@@ -59,10 +53,11 @@ public class ManipulateTV3 {
                 try {
                     Statement statementFoot = connection.createStatement();
                     statementFoot.executeUpdate(insertFootage);
+                    System.out.println("Footage #" + i + ": " + insertFootage);
+
                 } catch (SQLIntegrityConstraintViolationException d) {
                     System.out.println("Entry already exists in the database!");
                 }
-                //statement.executeUpdate(insertManually);
                 // Close connection.
                 connection.close();
             }

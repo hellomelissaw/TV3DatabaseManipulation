@@ -22,45 +22,53 @@ public class ManipulateTV3 {
             //System.out.println("Type sql manipulation: ");
             FootagesAndReportersLoader loader = new FootagesAndReportersLoader();
             List<FootageAndReporter> footAndRep = loader.loadFootagesAndReporters("src/main/java/uploads.csv");
-
+            String insertJournalist = null;
+            String insertFootage = null;
+            for(int i = 0 ; i < footAndRep.size() ; i ++) {
                 String country = "'Danemark');";
-                String insertJournalist = "INSERT Journalist VALUES (" + footAndRep.get(0).getReporter().getCPR()
-                        + ", '" + footAndRep.get(0).getReporter().getFirstName() + "'"
-                        + ", '" + footAndRep.get(0).getReporter().getLastName() + "'"
-                        + ", '" + footAndRep.get(0).getReporter().getStreetName() + "'"
-                        + ", '" + footAndRep.get(0).getReporter().getCivicNumber() + "'"
-                        + ", '" + footAndRep.get(0).getReporter().getCountry() + "'"
-                        + ", '" + footAndRep.get(0).getReporter().getZIPCode() + "'"
+                insertJournalist = "INSERT Journalist VALUES (" + footAndRep.get(i).getReporter().getCPR()
+                        + ", '" + footAndRep.get(i).getReporter().getFirstName() + "'"
+                        + ", '" + footAndRep.get(i).getReporter().getLastName() + "'"
+                        + ", '" + footAndRep.get(i).getReporter().getStreetName() + "'"
+                        + ", '" + footAndRep.get(i).getReporter().getCivicNumber() + "'"
+                        + ", '" + footAndRep.get(i).getReporter().getCountry() + "'"
+                        + ", '" + footAndRep.get(i).getReporter().getZIPCode() + "'"
                         + ", " + country;
 
-                System.out.println(insertJournalist);
+                System.out.println("Journalist #" + i + ": " + insertJournalist);
 
-            //System.out.println( footAndRep.get(0).getFootage().getDuration() + "class is: " + footAndRep.get(0).getReporter().getCPR().getClass());
-            String insertFootage =  "INSERT Footage VALUES ('" + footAndRep.get(0).getFootage().getTitle() + "'," +
-                    " '" + footAndRep.get(0).getFootage().getDate() + "',"
-                    + " '" + footAndRep.get(0).getFootage().getDuration() + "', "
-                    + footAndRep.get(0).getReporter().getCPR() + ");";
-            //System.out.println(insertFootage);
-            //scanner.close();
+                //System.out.println( footAndRep.get(0).getFootage().getDuration() + "class is: " + footAndRep.get(0).getReporter().getCPR().getClass());
+                insertFootage = "INSERT Footage VALUES ('" + footAndRep.get(i).getFootage().getTitle() + "'," +
+                        " '" + footAndRep.get(i).getFootage().getDate() + "',"
+                        + " '" + footAndRep.get(i).getFootage().getDuration() + "', "
+                        + footAndRep.get(i).getReporter().getCPR() + ");";
+                System.out.println("Footage #" + i + ": " + insertFootage);
+                //scanner.close();
 
+                // Get a connection.
+                Connection connection = DriverManager.getConnection(url, username, password);
+                // Create and execute Update.
+                Statement statementJour = connection.createStatement();
 
-            // Get a connection.
-            Connection connection = DriverManager.getConnection(url, username, password);
-            // Create and execute Update.
-            Statement statementJour = connection.createStatement();
+                try {
+                    statementJour.executeUpdate(insertJournalist);
+                } catch (SQLIntegrityConstraintViolationException d) {
+                    System.out.println("Entry already exists in the database!");
+                }
 
-            try {
-            statementJour.executeUpdate(insertJournalist);
-            } catch (SQLIntegrityConstraintViolationException d) {
-                System.out.println("Entry already exists in the database!");
+                try {
+                    Statement statementFoot = connection.createStatement();
+                    statementFoot.executeUpdate(insertFootage);
+                } catch (SQLIntegrityConstraintViolationException d) {
+                    System.out.println("Entry already exists in the database!");
+                }
+                //statement.executeUpdate(insertManually);
+                // Close connection.
+                connection.close();
             }
-            //Statement statementFoot = connection.createStatement();
-            //statementFoot.executeUpdate(insertFootage);
-            //statement.executeUpdate(insertManually);
-            // Close connection.
-            connection.close();
+
         } catch (Exception e) {
-        	e.printStackTrace(); 
+        	e.printStackTrace();
         }
     }
 }
